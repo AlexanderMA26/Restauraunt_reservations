@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Collections;
+import java.util.Random;
+
 
 public class Main {
     static ArrayList<Reservation> Resarray = new ArrayList<>();
@@ -13,9 +15,10 @@ public class Main {
     }
 
     static void Initialization() {
-        Resarray.add(new Reservation(14, 2, "Jim"));
-        Resarray.add(new Reservation(6, 5, "Alexander"));
-        Resarray.add(new Reservation(19, 6, "Robert"));
+        Resarray.add(new Reservation(14, 2, "Jim", new Random(System.currentTimeMillis()).nextInt()));
+        Resarray.add(new Reservation(6, 5, "Alexander", new Random(System.currentTimeMillis()).nextInt()));
+        Resarray.add(new Reservation(19, 6, "Robert", new Random(System.currentTimeMillis()).nextInt()));
+        sortList();
 
     }
 
@@ -31,15 +34,22 @@ public class Main {
         System.out.println("Give a name for your reservation");
         String parName = scanner.nextLine();
 
-        Resarray.add(new Reservation(resSize, parTime, parName));
+        int ResKey = Randint();
+
+
+        Resarray.add(new Reservation(resSize, parTime, parName, ResKey));
 
         System.out.println("We have recieved your reservation!");
+
+        System.out.println("Your reservation key is " + ResKey + ". Don't forget your key!");
+
+        sortList();
 
         Input();
     }
 
     static void viewReservation() {
-
+        sortList();
         for (Reservation obj : Resarray) {
             System.out.println();
             System.out.println("Reservation Name: " + obj.partyName);
@@ -47,9 +57,9 @@ public class Main {
             System.out.println("Reservation Size: " + obj.partySize);
         }
         Input();
-}
+    }
 
-    static void Input(){
+    static void Input() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nEnter 'R' for existing reservations\nEnter 'N' to create a new reservation\nEnter 'C' to cancel a reservation");
 
@@ -59,7 +69,7 @@ public class Main {
             newReservation();
         } else if (beginningQuestions.equalsIgnoreCase("R")) {
             viewReservation();
-        }else{
+        } else {
             cancel();
         }
 
@@ -70,13 +80,12 @@ public class Main {
 
     static void cancel() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("What is the name of the group you would like to cancel?\n");
+        System.out.println("What is the key of the group you would like to cancel?\n");
 
-        String groupToCancel = scanner.nextLine();
+        int groupToCancel = Integer.parseInt(scanner.nextLine());
 
 
-        Resarray.removeIf(obj -> Objects.equals(obj.partyName, groupToCancel));
-
+        Resarray.removeIf(obj -> Objects.equals(obj.ResKey, groupToCancel));
 
 
         viewReservation();
@@ -86,14 +95,35 @@ public class Main {
     }
 
 
-    static void sortList() {
-        for (int i = 0; i <= Resarray.size(); i++) {
-            for (int j = 0; j <= Resarray.size(); j++)
-                if (Resarray.get(j).resTime > Resarray.get(j+1).resTime) {
-                    Collections.swap(Resarray, j, j++);
+    //Found on Stack Overflow
+    static public int Randint() {
+        Random r = new Random( System.currentTimeMillis() );
+        return 10000 + r.nextInt(20000);
+    }
 
+    static void sortList() {
+        int n = Resarray.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (Resarray.get(j) != null && Resarray.get(j + 1) != null && Resarray.get(j).resTime > Resarray.get(j + 1).resTime) {
+                    Collections.swap(Resarray, j, j + 1);
                 }
-        }
+            }
         }
     }
+
+    static void changeRes(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the key of the reservation you want to change");
+
+        String ResChange = scanner.nextLine();
+
+    }
+
+
+
+
+
+}
+
 

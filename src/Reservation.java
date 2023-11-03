@@ -7,11 +7,14 @@ public class Reservation {
         public int partySize;
         public String partyName;
 
-    public Reservation(int pResTime, int pPartySize, String pPartyName) {
+        public int ResKey;
+
+    public Reservation(int pResTime, int pPartySize, String pPartyName, int pResKey) {
 
         resTime = pResTime;
         partySize = pPartySize;
         partyName = pPartyName;
+        ResKey = pResKey;
 
 
     }
